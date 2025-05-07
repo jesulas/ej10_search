@@ -127,7 +127,7 @@ const agregaPelicula = (nuevaPelicula) => {
 
         actualizaPelicula(actualizaPelicula(), "28");
 */
-
+/*
         const actualizarCampos = {
             actors: [
             "Robert Downey Jr.",
@@ -147,7 +147,7 @@ const agregaPelicula = (nuevaPelicula) => {
             console.log(error);
             });
            };*/
-
+/*
            const actualizarCamposPelicula = (actualizarCampos, id) => {
             fetch(`http://localhost:3000/movies/` + id, {
             method: "PATCH",
@@ -169,3 +169,4 @@ const agregaPelicula = (nuevaPelicula) => {
            
 
            actualizarCamposPelicula(actualizarCampos, "*2");
+*/
