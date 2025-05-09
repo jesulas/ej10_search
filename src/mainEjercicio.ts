@@ -62,6 +62,17 @@ const crearHabilidades = (habilidades:string[]) =>{
     return lista
 }
 
+const obtenerValorCampo = (nombre: string): string => {
+const elementoCampo = document.getElementById(nombre);
+if (
+(elementoCampo && elementoCampo instanceof HTMLInputElement) ||
+elementoCampo instanceof HTMLTextAreaElement
+) {
+return elementoCampo.value;
+} else {
+throw new Error("No se ha encontrado el campo");
+}
+};
 
 const todosPersonajes = () => 
     axios
@@ -98,12 +109,14 @@ const buscarPersonaje = (nombre: string) =>
 
 let barra = document.getElementById("barraBusqueda")
 let boton = document.getElementById("botonBusqueda")
+
+/*
  if (boton != null){
 boton.addEventListener("click", () => {
     if (listado != null){
         if (barra != null && barra instanceof HTMLInputElement){
     listado.innerHTML = " "
-    buscarPersonaje(barra.value).then((data)=>{    
+    buscarPersonaje(obtenerValorCampo).then((data)=>{    
         data.forEach(element => {
            crearPersonajes(element) 
         });
@@ -111,5 +124,27 @@ boton.addEventListener("click", () => {
 }
 }
  })}
+*/
+
+const actualizaPersonajes = async(evento: Event): Promise<void> => {
+evento.preventDefault();
+let barra = obtenerValorCampo("barraBusqueda");
+if (listado != null){
+listado.innerHTML = " "
+    buscarPersonaje(barra).then((data)=>{    
+        data.forEach(element => {
+           crearPersonajes(element) 
+        });
+})
+}}
+
+const formulario = document.getElementById("busqueda")
+
+if (formulario && formulario instanceof HTMLFormElement) {
+formulario.addEventListener("submit", actualizaPersonajes);
+} else {
+throw new Error("No se ha encontrado el formulario");
+}
+
 
 
