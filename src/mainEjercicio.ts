@@ -1,33 +1,37 @@
 import axios, { AxiosResponse } from "axios";
 
-interface personaje {
-"id": "1",
-      "nombre": "Mortadelo",
-      "apodo": "Mortadelo",
-      "especialidad": "Disfraces",
-      "habilidades": ["Camuflaje", "Imitaciones", "Huida rápida"],
-      "amigo": "Filemón",
-      "imagen": "mortadelo.webp"
+interface Personaje{
+    id: string,
+      nombre: string,
+      apodo: string,
+      especialidad: string,
+      habilidades: string[],
+      amigo: string,
+      imagen: string
 }
 
 const listado = document.getElementById("listadoPersonajes")
 
-const crearPersonajes = (datos: AxiosResponse) =>{
-    let imagen = crearImagen(datos.data.imagen)
-    listado?.appendChild(imagen)
-    let nombre = crearNombre(datos.data.nombre)
-    listado?.appendChild(nombre)
-    let apodo = crearApodo(datos.data.apodo)
-    listado?.appendChild(apodo)
-    let especialidad = crearEspecialidad(datos.data.especialidad)
-    listado?.appendChild(especialidad)
-    let habilidad = crearHabilidades(datos.data.habilidades)
-    listado?.appendChild(habilidad)
+const crearPersonajes = (datos: Personaje) =>{
+    console.log(datos)
+    let contenedor = document.createElement("div");
+    contenedor.classList.add("contenedor");
+    listado?.appendChild(contenedor)
+    let imagen = crearImagen(datos.imagen)
+    contenedor.appendChild(imagen)
+    let nombre = crearNombre(datos.nombre)
+    contenedor.appendChild(nombre)
+    let apodo = crearApodo(datos.apodo)
+    contenedor.appendChild(apodo)
+    let especialidad = crearEspecialidad(datos.especialidad)
+    contenedor.appendChild(especialidad)
+    let habilidad = crearHabilidades(datos.habilidades)
+    contenedor.appendChild(habilidad)
 }
 
 const crearImagen = (foto: string) =>{
     const imagen = document.createElement("img");
-    imagen.src=foto;
+    imagen.src= `http://localhost:3000/` + foto ;
     return imagen
 }
 
@@ -64,33 +68,48 @@ const todosPersonajes = () =>
     .get("http://localhost:3000/personajes")
     .then((response) => {
     console.log(response.data)
-    return response;
+    return response.data
     })
     .catch((error) => {
     console.log(error);
     })
 
 
-todosPersonajes();
-/*
+document.addEventListener("DOMContentLoaded", ( )=> {
+todosPersonajes().then((data)=>{
+    data.forEach(element => {
+       crearPersonajes(element) 
+    });
+    
+})
+})
+
+
 const buscarPersonaje = (nombre: string) =>
     axios
     .get("http://localhost:3000/personajes?nombre_like=" + nombre)
     .then((response) => {
-    console.log(response.data);
+    console.log(response.data)
+    return response.data;
     })
     .catch((error) => {
     console.log(error);
     })
-*/
 
-crearPersonajes(todosPersonajes())
-
-/*
-let barra = document.getElementById("busqueda")
-if (barra !== null && barra instanceof HTMLInputElement ){
-   barra.addEventListener("keydown", buscarPersonaje(barra.value))
-   //barra.onchange = buscarPersonaje(barra.value)
-}*/
+let barra = document.getElementById("barraBusqueda")
+let boton = document.getElementById("botonBusqueda")
+ if (boton != null){
+boton.addEventListener("click", () => {
+    if (listado != null){
+        if (barra != null && barra instanceof HTMLInputElement){
+    listado.innerHTML = " "
+    buscarPersonaje(barra.value).then((data)=>{    
+        data.forEach(element => {
+           crearPersonajes(element) 
+        });
+})
+}
+}
+ })}
 
 
